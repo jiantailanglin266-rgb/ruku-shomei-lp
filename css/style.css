@@ -1,0 +1,902 @@
+/* ============================================================
+   るくの会｜動物医療の透明性を考える署名サイト
+   CSS設計：BEM（Block__Element--Modifier）
+   コンセプト：白基調 / 大胆な余白 / タイポグラフィ重視 / 高級感と信頼感
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   1. カスタムプロパティ（デザイントークン）
+   色・余白・書体をここで一元管理。トンマナ変更時はここだけ触る
+------------------------------------------------------------ */
+:root {
+  /* Color */
+  --color-text: #1d1d1f;          /* 本文：ほぼ黒 */
+  --color-text-soft: #55555b;     /* 補足テキスト */
+  --color-bg: #ffffff;            /* 基調の白 */
+  --color-bg-tint: #f7f7f8;       /* セクション交互の淡いグレー */
+  --color-bg-dark: #16232e;       /* 署名セクション：深い紺 */
+  --color-accent: #2c5f7c;        /* アクセント：落ち着いた青 */
+  --color-accent-dark: #234c63;   /* アクセント hover */
+  --color-notice-bg: #fdf8ef;     /* 注意書きカード背景（淡い生成り） */
+  --color-notice-border: #d9c08a; /* 注意書きカード枠 */
+  --color-line: #e5e5e7;          /* 罫線 */
+
+  /* Typography */
+  --font-sans: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic Medium",
+               "Yu Gothic", "Noto Sans JP", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-serif: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", serif;
+
+  /* Spacing（余白を大胆に取るための基準値） */
+  --space-section: clamp(96px, 14vw, 180px);   /* セクション間 */
+  --space-header: clamp(48px, 7vw, 88px);      /* 見出しと本文の間 */
+
+  /* Layout */
+  --width-content: 1080px;
+  --width-narrow: 760px;
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-fade: 0.9s;
+}
+
+/* ------------------------------------------------------------
+   2. リセット & ベース
+------------------------------------------------------------ */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  /* 固定ヘッダー分、アンカー位置を下げる */
+  scroll-padding-top: 84px;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  font-size: 16px;
+  line-height: 2;
+  letter-spacing: 0.04em;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* フォーカスリング（アクセシビリティ：キーボード操作を可視化） */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* 動きを減らす設定のユーザーにはアニメーションを無効化 */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ------------------------------------------------------------
+   3. ユーティリティ
+------------------------------------------------------------ */
+/* スキップリンク：フォーカス時のみ表示 */
+.skip-link {
+  position: absolute;
+  top: -80px;
+  left: 16px;
+  z-index: 200;
+  padding: 12px 20px;
+  background: var(--color-text);
+  color: #fff;
+  font-size: 14px;
+  border-radius: 0 0 8px 8px;
+  transition: top 0.2s var(--ease-out);
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* PC/SP 表示切替用の改行 */
+.u-pc-only { display: inline; }
+.u-sp-only { display: none; }
+
+@media (max-width: 768px) {
+  .u-pc-only { display: none; }
+  .u-sp-only { display: inline; }
+}
+
+/* フェードイン（JSが .is-visible を付与） */
+.js-fade {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity var(--duration-fade) var(--ease-out),
+    transform var(--duration-fade) var(--ease-out);
+}
+
+.js-fade.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* JS無効環境でも内容が読めるようフォールバック */
+.no-js .js-fade {
+  opacity: 1;
+  transform: none;
+}
+
+/* ------------------------------------------------------------
+   4. ヘッダー
+------------------------------------------------------------ */
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 100;
+  background: transparent;
+  transition: background 0.4s var(--ease-out), box-shadow 0.4s var(--ease-out);
+}
+
+/* スクロール後：すりガラス風の白背景（JSで付与） */
+.header.is-scrolled {
+  background: rgba(255, 255, 255, 0.85);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
+}
+
+.header__inner {
+  max-width: var(--width-content);
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.header__logo {
+  font-family: var(--font-serif);
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+}
+
+.header__list {
+  display: flex;
+  gap: 28px;
+}
+
+.header__link {
+  font-size: 13px;
+  color: var(--color-text-soft);
+  transition: color 0.3s;
+}
+
+.header__link:hover {
+  color: var(--color-text);
+}
+
+.header__cta {
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  background: var(--color-accent);
+  padding: 9px 20px;
+  border-radius: 100px;
+  transition: background 0.3s;
+  white-space: nowrap;
+}
+
+.header__cta:hover {
+  background: var(--color-accent-dark);
+}
+
+/* SP：ナビは非表示にしCTAのみ残す（1ページ完結のため許容） */
+@media (max-width: 768px) {
+  .header__nav {
+    display: none;
+  }
+}
+
+/* ------------------------------------------------------------
+   5. ボタン（共通コンポーネント）
+------------------------------------------------------------ */
+.button {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  text-align: center;
+  font-weight: 600;
+  border-radius: 100px;
+  transition: transform 0.3s var(--ease-out), background 0.3s, box-shadow 0.3s;
+}
+
+.button--primary {
+  background: var(--color-accent);
+  color: #fff;
+  font-size: 15px;
+  padding: 16px 48px;
+  box-shadow: 0 8px 24px rgba(44, 95, 124, 0.28);
+}
+
+.button--primary:hover {
+  background: var(--color-accent-dark);
+  transform: translateY(-2px);
+}
+
+/* 署名セクションの大型ボタン */
+.button--large {
+  background: #fff;
+  color: var(--color-bg-dark);
+  font-size: clamp(16px, 2.4vw, 19px);
+  padding: 22px 72px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+}
+
+.button--large:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3);
+}
+
+.button__sub {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--color-text-soft);
+  letter-spacing: 0.06em;
+}
+
+/* ------------------------------------------------------------
+   6. セクション共通
+------------------------------------------------------------ */
+.section {
+  padding: var(--space-section) 0;
+}
+
+/* 交互に敷く淡い背景 */
+.section--tint {
+  background: var(--color-bg-tint);
+}
+
+/* 署名セクション：深い紺 */
+.section--dark {
+  background: var(--color-bg-dark);
+  color: #fff;
+}
+
+.section__inner {
+  max-width: var(--width-content);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.section__inner--narrow {
+  max-width: var(--width-narrow);
+}
+
+.section__header {
+  text-align: center;
+  margin-bottom: var(--space-header);
+}
+
+.section__eyebrow {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin-bottom: 20px;
+}
+
+.section__eyebrow--light {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.section__title {
+  font-family: var(--font-serif);
+  font-size: clamp(26px, 4.6vw, 40px);
+  font-weight: 600;
+  line-height: 1.6;
+  letter-spacing: 0.06em;
+}
+
+.section__title--light {
+  color: #fff;
+}
+
+.section__lead {
+  margin-top: 28px;
+  font-size: clamp(14px, 1.8vw, 16px);
+  color: var(--color-text-soft);
+}
+
+.section__lead--light {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+/* ------------------------------------------------------------
+   7. Hero
+------------------------------------------------------------ */
+.hero {
+  position: relative;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* 写真エリア（ダミー）：実写真差し替え時は background-image を指定
+   例）background: url("../images/hero.jpg") center / cover no-repeat; */
+.hero__bg {
+  position: absolute;
+  inset: -10% 0;               /* パララックス移動分の余裕 */
+  background: linear-gradient(168deg, #eef1f4 0%, #dfe6ec 45%, #cdd9e2 100%);
+  will-change: transform;
+}
+
+/* 写真の上に敷く薄い白ベール：文字の可読性を担保 */
+.hero__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.55) 0%,
+    rgba(255, 255, 255, 0.35) 55%,
+    rgba(255, 255, 255, 0.7) 100%
+  );
+}
+
+.hero__content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 120px 24px 80px;
+  max-width: 880px;
+}
+
+.hero__eyebrow {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  color: var(--color-accent);
+  margin-bottom: 32px;
+}
+
+.hero__title {
+  font-family: var(--font-serif);
+  font-size: clamp(30px, 6.4vw, 58px);
+  font-weight: 600;
+  line-height: 1.7;
+  letter-spacing: 0.06em;
+}
+
+.hero__lead {
+  margin-top: 36px;
+  font-size: clamp(14px, 1.9vw, 16px);
+  line-height: 2.2;
+  color: var(--color-text-soft);
+}
+
+.hero__actions {
+  margin-top: 48px;
+}
+
+/* ファーストビューの係争中注記 */
+.hero__note {
+  margin-top: 28px;
+  font-size: 12px;
+  color: var(--color-text-soft);
+  letter-spacing: 0.06em;
+}
+
+/* スクロールインジケーター */
+.hero__scroll {
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  z-index: 1;
+}
+
+.hero__scroll-text {
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--color-text-soft);
+}
+
+.hero__scroll-line {
+  width: 1px;
+  height: 48px;
+  background: var(--color-text-soft);
+  transform-origin: top;
+  animation: scroll-line 2.2s var(--ease-out) infinite;
+}
+
+@keyframes scroll-line {
+  0%   { transform: scaleY(0); }
+  45%  { transform: scaleY(1); transform-origin: top; }
+  55%  { transform: scaleY(1); transform-origin: bottom; }
+  100% { transform: scaleY(0); transform-origin: bottom; }
+}
+
+/* ------------------------------------------------------------
+   8. Story：るくとの日々
+------------------------------------------------------------ */
+.story__block {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: clamp(32px, 6vw, 80px);
+  align-items: center;
+}
+
+/* ブロック間の余白は大胆に */
+.story__block + .story__block {
+  margin-top: clamp(72px, 10vw, 140px);
+}
+
+/* 写真を左右交互に：--reverse で写真を右側へ */
+.story__block--reverse .story__photo {
+  order: 2;
+}
+
+.story__block--reverse .story__text {
+  order: 1;
+}
+
+/* ダミー写真エリア：実写真差し替え時は <img class="story__img"> に置換 */
+.story__photo {
+  aspect-ratio: 4 / 3;
+  border-radius: 20px;
+  background: linear-gradient(150deg, #edf0f3 0%, #dde4ea 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 24px 60px rgba(29, 29, 31, 0.08);
+}
+
+.story__img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 20px;
+  box-shadow: 0 24px 60px rgba(29, 29, 31, 0.08);
+}
+
+.story__photo-label {
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #a8b2ba;
+}
+
+.story__heading {
+  font-family: var(--font-serif);
+  font-size: clamp(20px, 2.8vw, 26px);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  margin-bottom: 20px;
+}
+
+.story__body {
+  font-size: 15px;
+  color: var(--color-text-soft);
+}
+
+@media (max-width: 768px) {
+  .story__block,
+  .story__block--reverse {
+    grid-template-columns: 1fr;
+  }
+  /* SPでは常に写真→テキストの順 */
+  .story__block--reverse .story__photo { order: 0; }
+  .story__block--reverse .story__text { order: 1; }
+}
+
+/* ------------------------------------------------------------
+   9. About：現在の状況 & 注意書きカード
+------------------------------------------------------------ */
+.about__body {
+  max-width: var(--width-narrow);
+  margin: 0 auto;
+}
+
+.about__text {
+  font-size: 15px;
+  color: var(--color-text-soft);
+}
+
+.about__text + .about__text {
+  margin-top: 24px;
+}
+
+/* 注意書きカード：淡い生成り×金茶の枠で品位を保ちつつ目立たせる */
+.notice {
+  max-width: var(--width-narrow);
+  margin: 56px auto 0;
+  background: var(--color-notice-bg);
+  border: 1px solid var(--color-notice-border);
+  border-radius: 16px;
+  padding: clamp(28px, 5vw, 44px);
+}
+
+.notice__title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: #8a6d2f;
+  margin-bottom: 20px;
+}
+
+.notice__icon {
+  flex-shrink: 0;
+}
+
+.notice__list {
+  display: grid;
+  gap: 12px;
+}
+
+.notice__item {
+  position: relative;
+  padding-left: 22px;
+  font-size: 14px;
+  line-height: 1.9;
+}
+
+/* リストマーカー（装飾は最小限のドット） */
+.notice__item::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 0.85em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-notice-border);
+}
+
+.notice__item strong {
+  font-weight: 600;
+}
+
+.notice__footnote {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(217, 192, 138, 0.4);
+  font-size: 12.5px;
+  color: var(--color-text-soft);
+}
+
+/* ------------------------------------------------------------
+   10. Purpose：私たちが目指すこと
+------------------------------------------------------------ */
+.purpose__list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: clamp(20px, 3vw, 32px);
+}
+
+.purpose__item {
+  background: var(--color-bg);
+  border: 1px solid var(--color-line);
+  border-radius: 20px;
+  padding: clamp(28px, 4vw, 44px);
+  transition: box-shadow 0.4s var(--ease-out), transform 0.4s var(--ease-out);
+}
+
+.purpose__item:hover {
+  box-shadow: 0 20px 48px rgba(29, 29, 31, 0.07);
+  transform: translateY(-4px);
+}
+
+.purpose__number {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: var(--color-accent);
+  margin-bottom: 18px;
+}
+
+.purpose__heading {
+  font-family: var(--font-serif);
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  margin-bottom: 14px;
+}
+
+.purpose__body {
+  font-size: 14px;
+  color: var(--color-text-soft);
+}
+
+@media (max-width: 768px) {
+  .purpose__list {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ------------------------------------------------------------
+   11. Signature：署名CTA
+------------------------------------------------------------ */
+.signature__inner {
+  text-align: center;
+}
+
+.signature__action {
+  margin-top: 8px;
+}
+
+.signature__note {
+  margin-top: 24px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* ------------------------------------------------------------
+   12. Timeline：これまでの経過
+------------------------------------------------------------ */
+.timeline__list {
+  position: relative;
+  padding-left: 28px;
+}
+
+/* 縦のライン */
+.timeline__list::before {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 8px;
+  bottom: 8px;
+  width: 1px;
+  background: var(--color-line);
+}
+
+.timeline__item {
+  position: relative;
+  padding-bottom: 48px;
+}
+
+.timeline__item:last-child {
+  padding-bottom: 0;
+}
+
+/* ドット */
+.timeline__item::before {
+  content: "";
+  position: absolute;
+  left: -27px;
+  top: 9px;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--color-bg);
+  border: 2px solid var(--color-accent);
+}
+
+.timeline__date {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: var(--color-accent);
+  margin-bottom: 8px;
+}
+
+.timeline__heading {
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  margin-bottom: 8px;
+}
+
+.timeline__body {
+  font-size: 14px;
+  color: var(--color-text-soft);
+}
+
+.timeline__disclaimer {
+  margin-top: 48px;
+  font-size: 12.5px;
+  color: var(--color-text-soft);
+  text-align: center;
+}
+
+/* ------------------------------------------------------------
+   13. FAQ
+------------------------------------------------------------ */
+.faq__list {
+  display: grid;
+  gap: 14px;
+}
+
+.faq__item {
+  background: var(--color-bg);
+  border: 1px solid var(--color-line);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.faq__question {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 22px 26px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  list-style: none;             /* デフォルトの▼マーカーを消す */
+  transition: background 0.3s;
+}
+
+.faq__question::-webkit-details-marker {
+  display: none;
+}
+
+.faq__question:hover {
+  background: var(--color-bg-tint);
+}
+
+/* +/− アイコン（CSSのみで描画） */
+.faq__icon {
+  position: relative;
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+}
+
+.faq__icon::before,
+.faq__icon::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 14px;
+  height: 1.5px;
+  background: var(--color-accent);
+  transform: translate(-50%, -50%);
+  transition: transform 0.3s var(--ease-out);
+}
+
+.faq__icon::after {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+/* 開いたら縦棒を消して「−」に */
+.faq__item[open] .faq__icon::after {
+  transform: translate(-50%, -50%) rotate(0deg);
+  opacity: 0;
+}
+
+.faq__answer {
+  padding: 0 26px 24px;
+  font-size: 14px;
+  color: var(--color-text-soft);
+}
+
+/* ------------------------------------------------------------
+   14. 免責事項
+------------------------------------------------------------ */
+.disclaimer__title {
+  font-family: var(--font-serif);
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.disclaimer__body p {
+  font-size: 13.5px;
+  color: var(--color-text-soft);
+}
+
+.disclaimer__body p + p {
+  margin-top: 18px;
+}
+
+/* ------------------------------------------------------------
+   15. フッター
+------------------------------------------------------------ */
+.footer {
+  border-top: 1px solid var(--color-line);
+  padding: 72px 0 48px;
+  text-align: center;
+}
+
+.footer__inner {
+  max-width: var(--width-content);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.footer__logo {
+  font-family: var(--font-serif);
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+}
+
+.footer__tagline {
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--color-text-soft);
+  letter-spacing: 0.1em;
+}
+
+.footer__nav {
+  margin-top: 36px;
+}
+
+.footer__list {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px 32px;
+}
+
+.footer__link {
+  font-size: 13px;
+  color: var(--color-text-soft);
+  transition: color 0.3s;
+}
+
+.footer__link:hover {
+  color: var(--color-text);
+}
+
+.footer__note {
+  margin-top: 40px;
+  font-size: 12px;
+  color: var(--color-text-soft);
+}
+
+.footer__copyright {
+  margin-top: 16px;
+  font-size: 12px;
+  color: var(--color-text-soft);
+}
