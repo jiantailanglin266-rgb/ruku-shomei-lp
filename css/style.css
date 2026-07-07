@@ -192,6 +192,22 @@ a {
   letter-spacing: 0.12em;
 }
 
+/* ロゴ横の小さなタグライン（SPでは非表示） */
+.header__tagline {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  color: var(--color-text-soft);
+  margin-left: 12px;
+}
+
+@media (max-width: 768px) {
+  .header__tagline {
+    display: none;
+  }
+}
+
 .header__list {
   display: flex;
   gap: 28px;
@@ -458,6 +474,133 @@ a {
   45%  { transform: scaleY(1); transform-origin: top; }
   55%  { transform: scaleY(1); transform-origin: bottom; }
   100% { transform: scaleY(0); transform-origin: bottom; }
+}
+
+/* ------------------------------------------------------------
+   6.5 Prose：本文テキストの共通コンポーネント
+   （はじめに・本署名の目的・事件の経緯などの読み物セクション用）
+------------------------------------------------------------ */
+.prose {
+  max-width: var(--width-narrow);
+  margin: 0 auto;
+}
+
+.prose p {
+  font-size: 15px;
+  color: var(--color-text-soft);
+}
+
+.prose p + p {
+  margin-top: 24px;
+}
+
+/* 呼びかけなどの強調行 */
+.prose__emphasis {
+  font-family: var(--font-serif);
+  font-size: 17px !important;
+  font-weight: 600;
+  color: var(--color-text) !important;
+  text-align: center;
+  padding: 8px 0;
+}
+
+/* 補足注記（主張ベースであることの明示など） */
+.prose__note {
+  font-size: 12.5px !important;
+  letter-spacing: 0.04em;
+}
+
+/* ------------------------------------------------------------
+   6.6 Goal：裁判所への要望と未来への願い（番号付きリスト）
+------------------------------------------------------------ */
+.goal {
+  max-width: var(--width-narrow);
+  margin: 56px auto 0;
+}
+
+.goal__heading {
+  font-family: var(--font-serif);
+  font-size: 19px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.goal__list {
+  counter-reset: goal;
+  display: grid;
+  gap: 16px;
+}
+
+.goal__item {
+  counter-increment: goal;
+  position: relative;
+  background: var(--color-bg);
+  border: 1px solid var(--color-line);
+  border-radius: 14px;
+  padding: 22px 26px 22px 64px;
+  font-size: 14px;
+  color: var(--color-text-soft);
+}
+
+/* 01, 02, 03 の番号 */
+.goal__item::before {
+  content: "0" counter(goal);
+  position: absolute;
+  left: 24px;
+  top: 24px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: var(--color-accent);
+}
+
+/* ------------------------------------------------------------
+   6.7 Case：事件の経緯の補助要素
+------------------------------------------------------------ */
+/* 経緯セクション内の注記枠は本文の前に置くため下余白を調整 */
+.case .notice {
+  margin: 0 auto 48px;
+}
+
+/* 注記が1文のみの場合は上罫線を消す */
+.notice__footnote--single {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+  border-top: none !important;
+  font-size: 13.5px !important;
+  line-height: 2;
+}
+
+/* Instagramリンク */
+.case__more {
+  max-width: var(--width-narrow);
+  margin: 48px auto 0;
+  text-align: center;
+}
+
+.case__more-text {
+  font-size: 13px;
+  color: var(--color-text-soft);
+  margin-bottom: 14px;
+}
+
+.case__more-link {
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--color-accent);
+  border: 1px solid var(--color-accent);
+  border-radius: 100px;
+  padding: 12px 32px;
+  transition: background 0.3s, color 0.3s;
+}
+
+.case__more-link:hover {
+  background: var(--color-accent);
+  color: #fff;
 }
 
 /* ------------------------------------------------------------
@@ -840,80 +983,6 @@ a {
 }
 
 /* ------------------------------------------------------------
-   13. FAQ
------------------------------------------------------------- */
-.faq__list {
-  display: grid;
-  gap: 14px;
-}
-
-.faq__item {
-  background: var(--color-bg);
-  border: 1px solid var(--color-line);
-  border-radius: 14px;
-  overflow: hidden;
-}
-
-.faq__question {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 22px 26px;
-  font-size: 15px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  cursor: pointer;
-  list-style: none;             /* デフォルトの▼マーカーを消す */
-  transition: background 0.3s;
-}
-
-.faq__question::-webkit-details-marker {
-  display: none;
-}
-
-.faq__question:hover {
-  background: var(--color-bg-tint);
-}
-
-/* +/− アイコン（CSSのみで描画） */
-.faq__icon {
-  position: relative;
-  flex-shrink: 0;
-  width: 16px;
-  height: 16px;
-}
-
-.faq__icon::before,
-.faq__icon::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 14px;
-  height: 1.5px;
-  background: var(--color-accent);
-  transform: translate(-50%, -50%);
-  transition: transform 0.3s var(--ease-out);
-}
-
-.faq__icon::after {
-  transform: translate(-50%, -50%) rotate(90deg);
-}
-
-/* 開いたら縦棒を消して「−」に */
-.faq__item[open] .faq__icon::after {
-  transform: translate(-50%, -50%) rotate(0deg);
-  opacity: 0;
-}
-
-.faq__answer {
-  padding: 0 26px 24px;
-  font-size: 14px;
-  color: var(--color-text-soft);
-}
-
-/* ------------------------------------------------------------
    14. 免責事項
 ------------------------------------------------------------ */
 .disclaimer__title {
@@ -947,6 +1016,15 @@ a {
   max-width: var(--width-content);
   margin: 0 auto;
   padding: 0 24px;
+}
+
+/* 呼びかけスローガン */
+.footer__slogan {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: var(--color-accent);
+  margin-bottom: 12px;
 }
 
 .footer__logo {
