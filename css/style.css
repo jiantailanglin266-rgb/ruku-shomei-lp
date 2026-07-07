@@ -20,6 +20,7 @@
   --color-notice-bg: #fdf8ef;     /* 注意書きカード背景（淡い生成り） */
   --color-notice-border: #d9c08a; /* 注意書きカード枠 */
   --color-line: #e5e5e7;          /* 罫線 */
+  --color-emphasis: #c22f2f;      /* 強調用の赤（署名サイトの明示など） */
 
   /* Typography */
   --font-sans: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic Medium",
@@ -454,11 +455,22 @@ a {
   max-width: 880px;
 }
 
-.hero__eyebrow {
-  font-size: 13px;
+/* 会名ブロック（青・タイトルの上） */
+.hero__brand {
+  font-size: clamp(15px, 2.3vw, 20px);
   font-weight: 600;
-  letter-spacing: 0.24em;
+  line-height: 2;
+  letter-spacing: 0.12em;
   color: var(--color-accent);
+  margin-bottom: 32px;
+}
+
+/* 署名サイトであることの明示（大きめ・赤） */
+.hero__eyebrow {
+  font-size: clamp(16px, 2.6vw, 23px);
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: var(--color-emphasis);
   margin-bottom: 32px;
 }
 
