@@ -174,6 +174,37 @@
     </section>
 
     <!-- ============================================================
+         Marquee（上部）：子犬期の思い出が流れる帯
+         画像の追加・入替は .marquee__group 内の <img> を編集
+         ※ 2つ目のグループはループ用の複製（aria-hidden）。
+           1つ目と同じ並びを維持すること
+    ============================================================ -->
+    <div class="marquee" aria-label="子犬の頃のるくの写真">
+      <div class="marquee__track">
+        <div class="marquee__group">
+          <img class="marquee__img" src="images/marquee/dogs-01.jpg" alt="" loading="lazy" width="640" height="400">
+          <img class="marquee__img" src="images/marquee/dogs-02.jpg" alt="" loading="lazy" width="640" height="400">
+          <img class="marquee__img" src="images/marquee/dogs-03.jpg" alt="" loading="lazy" width="640" height="400">
+          <img class="marquee__img" src="images/marquee/dogs-04.jpg" alt="" loading="lazy" width="640" height="400">
+          <img class="marquee__img" src="images/marquee/dogs-05.jpg" alt="" loading="lazy" width="640" height="400">
+          <img class="marquee__img" src="images/marquee/dogs-06.jpg" alt="" loading="lazy" width="640" height="400">
+          <img class="marquee__img" src="images/marquee/dogs-07.jpg" alt="" loading="lazy" width="640" height="400">
+          <img class="marquee__img" src="images/marquee/dogs-08.jpg" alt="" loading="lazy" width="640" height="400">
+        </div>
+        <div class="marquee__group" aria-hidden="true">
+          <img class="marquee__img" src="images/marquee/dogs-01.jpg" alt="" loading="lazy" width="640" height="400">
+          <img class="marquee__img" src="images/marquee/dogs-02.jpg" alt="" loading="lazy" width="640" height="400">
+          <img class="marquee__img" src="images/marquee/dogs-03.jpg" alt="" loading="lazy" width="640" height="400">
+          <img class="marquee__img" src="images/marquee/dogs-04.jpg" alt="" loading="lazy" width="640" height="400">
+          <img class="marquee__img" src="images/marquee/dogs-05.jpg" alt="" loading="lazy" width="640" height="400">
+          <img class="marquee__img" src="images/marquee/dogs-06.jpg" alt="" loading="lazy" width="640" height="400">
+          <img class="marquee__img" src="images/marquee/dogs-07.jpg" alt="" loading="lazy" width="640" height="400">
+          <img class="marquee__img" src="images/marquee/dogs-08.jpg" alt="" loading="lazy" width="640" height="400">
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
          Story：るくとの日々
          写真＋文章のブロックを .story__block として繰り返すだけで
          CMSなしで追加・編集できる構造
@@ -331,6 +362,34 @@
     </section>
 
     <!-- ============================================================
+         Marquee（中部）：成長後・お出かけの思い出が流れる帯（逆方向）
+    ============================================================ -->
+    <div class="marquee marquee--reverse" aria-label="成長したるくとお出かけの写真">
+      <div class="marquee__track">
+        <div class="marquee__group">
+          <img class="marquee__img" src="images/marquee/dogs-09.jpg" alt="" loading="lazy" width="640" height="400">
+          <img class="marquee__img" src="images/marquee/dogs-10.jpg" alt="" loading="lazy" width="640" height="400">
+          <img class="marquee__img" src="images/marquee/dogs-11.jpg" alt="" loading="lazy" width="640" height="400">
+          <img class="marquee__img" src="images/marquee/dogs-12.jpg" alt="" loading="lazy" width="640" height="400">
+          <img class="marquee__img" src="images/marquee/dogs-13.jpg" alt="" loading="lazy" width="640" height="400">
+          <img class="marquee__img" src="images/marquee/dogs-14.jpg" alt="" loading="lazy" width="640" height="400">
+          <img class="marquee__img" src="images/marquee/dogs-15.jpg" alt="" loading="lazy" width="640" height="400">
+          <img class="marquee__img" src="images/marquee/dogs-16.jpg" alt="" loading="lazy" width="640" height="400">
+        </div>
+        <div class="marquee__group" aria-hidden="true">
+          <img class="marquee__img" src="images/marquee/dogs-09.jpg" alt="" loading="lazy" width="640" height="400">
+          <img class="marquee__img" src="images/marquee/dogs-10.jpg" alt="" loading="lazy" width="640" height="400">
+          <img class="marquee__img" src="images/marquee/dogs-11.jpg" alt="" loading="lazy" width="640" height="400">
+          <img class="marquee__img" src="images/marquee/dogs-12.jpg" alt="" loading="lazy" width="640" height="400">
+          <img class="marquee__img" src="images/marquee/dogs-13.jpg" alt="" loading="lazy" width="640" height="400">
+          <img class="marquee__img" src="images/marquee/dogs-14.jpg" alt="" loading="lazy" width="640" height="400">
+          <img class="marquee__img" src="images/marquee/dogs-15.jpg" alt="" loading="lazy" width="640" height="400">
+          <img class="marquee__img" src="images/marquee/dogs-16.jpg" alt="" loading="lazy" width="640" height="400">
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
          Signature：署名CTA
          外部署名プラットフォームへの導線
          TODO: href を実際の Change.org 等のURLに差し替え
@@ -408,6 +467,42 @@
         </p>
       </div>
     </section>
+
+    <!-- ============================================================
+         Marquee（下部）：裁判・報道に関する画像が流れる帯
+         ※ 報道各社の画像を含むため、出典表記を必ず残すこと
+    ============================================================ -->
+    <div class="marquee-media">
+      <p class="marquee-media__eyebrow">Media</p>
+      <h2 class="marquee-media__title">本件は各メディアで報道されています</h2>
+      <div class="marquee" aria-label="本件の裁判・報道に関する画像">
+        <div class="marquee__track">
+          <div class="marquee__group">
+            <img class="marquee__img" src="images/marquee/news-01.jpg" alt="裁判所の看板" loading="lazy" width="640" height="400">
+            <img class="marquee__img" src="images/marquee/news-02.jpg" alt="裁判所の建物" loading="lazy" width="640" height="400">
+            <img class="marquee__img" src="images/marquee/news-03.jpg" alt="大阪地方裁判所へ向かう原告側の様子（報道映像より）" loading="lazy" width="640" height="400">
+            <img class="marquee__img" src="images/marquee/news-04.jpg" alt="提訴に関する記者会見の様子（報道映像より）" loading="lazy" width="640" height="400">
+            <img class="marquee__img" src="images/marquee/news-05.jpg" alt="経緯を伝える報道番組の解説パネル" loading="lazy" width="640" height="400">
+            <img class="marquee__img" src="images/marquee/news-06.jpg" alt="報道動画のサムネイル（MBS NEWS）" loading="lazy" width="640" height="400">
+            <img class="marquee__img" src="images/marquee/news-07.jpg" alt="新聞社による記事の見出し（産経新聞）" loading="lazy" width="640" height="400">
+            <img class="marquee__img" src="images/marquee/news-08.jpg" alt="経過をまとめた新聞社の図表（産経新聞）" loading="lazy" width="640" height="400">
+          </div>
+          <div class="marquee__group" aria-hidden="true">
+            <img class="marquee__img" src="images/marquee/news-01.jpg" alt="" loading="lazy" width="640" height="400">
+            <img class="marquee__img" src="images/marquee/news-02.jpg" alt="" loading="lazy" width="640" height="400">
+            <img class="marquee__img" src="images/marquee/news-03.jpg" alt="" loading="lazy" width="640" height="400">
+            <img class="marquee__img" src="images/marquee/news-04.jpg" alt="" loading="lazy" width="640" height="400">
+            <img class="marquee__img" src="images/marquee/news-05.jpg" alt="" loading="lazy" width="640" height="400">
+            <img class="marquee__img" src="images/marquee/news-06.jpg" alt="" loading="lazy" width="640" height="400">
+            <img class="marquee__img" src="images/marquee/news-07.jpg" alt="" loading="lazy" width="640" height="400">
+            <img class="marquee__img" src="images/marquee/news-08.jpg" alt="" loading="lazy" width="640" height="400">
+          </div>
+        </div>
+      </div>
+      <p class="marquee-media__note">
+        ※ 一部の画像は産経新聞・MBS NEWS・TBS NEWS DIG等の報道より。報道内容は各社の取材に基づくものであり、裁判所の判断を示すものではありません。
+      </p>
+    </div>
 
     <!-- ============================================================
          FAQ：よくあるご質問
