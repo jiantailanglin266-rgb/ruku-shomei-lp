@@ -193,7 +193,7 @@ a {
 }
 
 .header__inner {
-  max-width: var(--width-content);
+  max-width: 1320px;   /* 会名が長くなったため、コンテンツ幅より広く取る */
   margin: 0 auto;
   padding: 0 24px;
   height: 64px;
@@ -220,21 +220,27 @@ a {
   margin-left: 12px;
 }
 
-@media (max-width: 768px) {
+/* ナビと窮屈になる幅ではタグラインを非表示に */
+@media (max-width: 1200px) {
   .header__tagline {
     display: none;
   }
 }
 
+.header__logo {
+  white-space: nowrap;
+}
+
 .header__list {
   display: flex;
-  gap: 28px;
+  gap: clamp(16px, 1.8vw, 26px);
 }
 
 .header__link {
   position: relative;
   font-size: 13px;
   color: var(--color-text-soft);
+  white-space: nowrap;   /* リンク文字の途中折り返しを防ぐ */
   transition: color 0.3s;
 }
 
@@ -451,7 +457,8 @@ a {
   position: relative;
   z-index: 1;
   text-align: center;
-  padding: 120px 24px 80px;
+  /* 下余白はSCROLLインジケーター（bottom:32px＋高さ約80px）と被らない量を確保 */
+  padding: 120px 24px 150px;
   max-width: 880px;
 }
 
