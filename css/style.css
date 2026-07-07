@@ -654,21 +654,35 @@ a {
   margin-bottom: 14px;
 }
 
+/* Instagramアイコン（円形のアイコンリンク） */
 .case__more-link {
-  display: inline-block;
-  font-size: 14px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
   color: var(--color-accent);
   border: 1px solid var(--color-accent);
-  border-radius: 100px;
-  padding: 12px 32px;
-  transition: background 0.3s, color 0.3s;
+  border-radius: 50%;
+  transition: background 0.3s, color 0.3s, transform 0.3s var(--ease-out);
 }
 
 .case__more-link:hover {
   background: var(--color-accent);
   color: #fff;
+  transform: translateY(-2px);
+}
+
+.case__more-icon {
+  display: block;
+}
+
+/* アイコン下のアカウント名 */
+.case__more-handle {
+  margin-top: 12px;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: var(--color-text-soft);
 }
 
 /* ------------------------------------------------------------
