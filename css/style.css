@@ -21,6 +21,7 @@
   --color-notice-border: #d9c08a; /* 注意書きカード枠 */
   --color-line: #e5e5e7;          /* 罫線 */
   --color-emphasis: #c22f2f;      /* 強調用の赤（署名サイトの明示など） */
+  --color-howto-bg: #fbe6f3;      /* 操作手順セクションの背景（淡いピンク） */
 
   /* Typography */
   --font-sans: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic Medium",
@@ -1028,6 +1029,190 @@ a {
   margin-top: 24px;
   font-size: 12px;
   color: rgba(255, 255, 255, 0.6);
+}
+
+/* ------------------------------------------------------------
+   11.5 操作手順（How to Sign）
+   署名方法が分からない方向けのガイド。元の手順書（Word）の
+   「ピンク背景で目立たせる」意図を踏襲しつつ、サイトの品位に合わせて整理
+------------------------------------------------------------ */
+.howto {
+  background: linear-gradient(
+    180deg,
+    var(--color-bg) 0%,
+    var(--color-howto-bg) clamp(48px, 7vw, 96px),
+    var(--color-howto-bg) calc(100% - clamp(48px, 7vw, 96px)),
+    var(--color-bg) 100%
+  );
+}
+
+.section__eyebrow--howto {
+  color: #b64d92;
+}
+
+.howto__steps {
+  display: grid;
+  gap: 8px;
+}
+
+/* 手順カード（白） */
+.howto__step {
+  background: var(--color-bg);
+  border-radius: 16px;
+  padding: clamp(22px, 3.5vw, 32px);
+  box-shadow: 0 8px 24px rgba(29, 29, 31, 0.05);
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+}
+
+/* STEP3はバナー＋本文の縦構成 */
+.howto__step--final {
+  flex-direction: column;
+}
+
+.howto__step-inner {
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+}
+
+.howto__num {
+  flex-shrink: 0;
+  font-family: var(--font-serif);
+  font-size: 26px;
+  font-weight: 600;
+  color: #b64d92;
+  line-height: 1.4;
+}
+
+.howto__body {
+  font-size: 14.5px;
+  color: var(--color-text);
+}
+
+.howto__body p + p {
+  margin-top: 12px;
+}
+
+.howto__sub {
+  color: var(--color-text-soft);
+  font-size: 13.5px;
+}
+
+/* 赤の注意書き（原文の赤字を踏襲） */
+.howto__caution {
+  color: var(--color-emphasis);
+  font-size: 13.5px;
+}
+
+/* ステップ間の矢印 */
+.howto__arrow {
+  text-align: center;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  color: #b64d92;
+  padding: 4px 0;
+}
+
+/* 「ここからが重要です」バナー（原文の緑ハイライトを踏襲） */
+.howto__important {
+  width: 100%;
+  text-align: center;
+  font-family: var(--font-serif);
+  font-size: clamp(18px, 2.8vw, 24px);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  background: #e2f4cd;
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin-bottom: 18px;
+}
+
+/* 緑・黄のマーカー */
+.howto__mark-green {
+  background: #e2f4cd;
+  padding: 1px 6px;
+  border-radius: 4px;
+  color: inherit;
+}
+
+.howto__mark-yellow {
+  background: #fff3a0;
+  padding: 1px 6px;
+  border-radius: 4px;
+  color: var(--color-emphasis);
+}
+
+/* メール内ボタンの引用（黄色帯） */
+.howto__quote {
+  background: #fff3a0;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-weight: 700;
+  font-size: 14px;
+  text-align: center;
+}
+
+/* 青・赤の強調（原文準拠） */
+.howto__strong-blue {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.howto__strong-red {
+  color: var(--color-emphasis);
+}
+
+/* 無料の安心表記 */
+.howto__free {
+  margin-top: 32px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: #b64d92;
+}
+
+.howto__cta {
+  margin-top: 32px;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .howto__step,
+  .howto__step-inner {
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+
+/* 操作手順への誘導リンク（署名ボタンの近くに配置） */
+.howto-link {
+  display: block;
+  margin-top: 18px;
+  font-size: 13px;
+  color: var(--color-text-soft);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  transition: color 0.3s;
+}
+
+.howto-link:hover {
+  color: var(--color-text);
+}
+
+.howto-link--light {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.howto-link--light:hover {
+  color: #fff;
+}
+
+.signature__howto {
+  margin-top: 4px;
 }
 
 /* ------------------------------------------------------------
