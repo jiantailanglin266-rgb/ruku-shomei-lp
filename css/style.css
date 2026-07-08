@@ -1211,6 +1211,17 @@ a {
   color: #fff;
 }
 
+/* Hero用：目立たせる赤文字バージョン */
+.howto-link--em {
+  color: var(--color-emphasis);
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.howto-link--em:hover {
+  color: #9c2323;
+}
+
 .signature__howto {
   margin-top: 4px;
 }
