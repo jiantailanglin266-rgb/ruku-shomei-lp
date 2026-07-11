@@ -134,6 +134,19 @@ a {
   top: 0;
 }
 
+/* スクリーンリーダー専用テキスト */
+.u-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* PC/SP 表示切替用の改行 */
 .u-pc-only { display: inline; }
 .u-sp-only { display: none; }
@@ -650,6 +663,11 @@ a {
 /* 経緯セクション内の注記枠は本文の前に置くため下余白を調整 */
 .case .notice {
   margin: 0 auto 48px;
+}
+
+/* 下層ページの記事内では注記枠を本文前の位置に */
+.article .notice {
+  margin: 0 auto 40px;
 }
 
 /* 注記が1文のみの場合は上罫線を消す */
@@ -1300,6 +1318,414 @@ a {
   font-size: 12.5px;
   color: var(--color-text-soft);
   text-align: center;
+}
+
+/* ------------------------------------------------------------
+   13. 下層ページ共通コンポーネント（SEO/LLMO対応の多ページ化用）
+------------------------------------------------------------ */
+/* パンくずリスト */
+.breadcrumb {
+  padding: 84px 0 0;
+}
+
+.breadcrumb__list {
+  max-width: var(--width-content);
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--color-text-soft);
+}
+
+.breadcrumb__item + .breadcrumb__item::before {
+  content: "›";
+  margin-right: 6px;
+  color: var(--color-line);
+}
+
+.breadcrumb__link {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.breadcrumb__link:hover {
+  color: var(--color-text);
+}
+
+/* 下層ページのタイトル部 */
+.page-hero {
+  padding: clamp(40px, 6vw, 72px) 0 clamp(32px, 5vw, 56px);
+  text-align: center;
+}
+
+.page-hero__inner {
+  max-width: var(--width-narrow);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.page-hero__title {
+  font-family: var(--font-serif);
+  font-size: clamp(24px, 4.2vw, 36px);
+  font-weight: 600;
+  line-height: 1.7;
+  letter-spacing: 0.08em;
+  font-feature-settings: "palt" 1;
+}
+
+.page-hero__lead {
+  margin-top: 20px;
+  font-size: 14.5px;
+  color: var(--color-text-soft);
+}
+
+/* 記事本文 */
+.article {
+  max-width: var(--width-narrow);
+  margin: 0 auto;
+  padding: 0 24px clamp(64px, 9vw, 110px);
+}
+
+.article h2 {
+  font-family: var(--font-serif);
+  font-size: clamp(20px, 3vw, 26px);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  line-height: 1.7;
+  margin: clamp(48px, 7vw, 72px) 0 20px;
+  padding-left: 16px;
+  border-left: 3px solid var(--color-accent);
+}
+
+.article h3 {
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  margin: 36px 0 12px;
+}
+
+.article p {
+  font-size: 15px;
+  color: var(--color-text-soft);
+  margin-bottom: 16px;
+}
+
+.article ul,
+.article ol {
+  margin: 0 0 20px;
+  padding-left: 4px;
+  display: grid;
+  gap: 8px;
+}
+
+.article li {
+  position: relative;
+  padding-left: 20px;
+  font-size: 14.5px;
+  color: var(--color-text-soft);
+  line-height: 1.9;
+}
+
+.article ul li::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 0.8em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-accent);
+}
+
+.article ol {
+  counter-reset: article-ol;
+}
+
+.article ol li {
+  counter-increment: article-ol;
+  padding-left: 26px;
+}
+
+.article ol li::before {
+  content: counter(article-ol) ".";
+  position: absolute;
+  left: 0;
+  font-weight: 600;
+  color: var(--color-accent);
+}
+
+/* 比較表など */
+.article .table-wrap {
+  overflow-x: auto;
+  margin: 0 0 24px;
+}
+
+.article table {
+  width: 100%;
+  min-width: 560px;
+  border-collapse: collapse;
+  font-size: 13.5px;
+  line-height: 1.8;
+}
+
+.article th,
+.article td {
+  border: 1px solid var(--color-line);
+  padding: 10px 14px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.article th {
+  background: var(--color-bg-tint);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* ■結論／■ポイント の強調ボックス（LLM引用対策） */
+.box {
+  border-radius: 14px;
+  padding: 22px 26px;
+  margin: 0 0 24px;
+  font-size: 14.5px;
+}
+
+.box__label {
+  display: block;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  margin-bottom: 10px;
+}
+
+.box--conclusion {
+  background: var(--color-bg-tint);
+  border: 1px solid var(--color-line);
+}
+
+.box--conclusion .box__label {
+  color: var(--color-accent);
+}
+
+.box--point {
+  background: #f2f7fa;
+  border: 1px solid #d8e6ee;
+}
+
+.box--point .box__label {
+  color: var(--color-accent);
+}
+
+.box p:last-child,
+.box ul:last-child {
+  margin-bottom: 0;
+}
+
+/* 記事末尾の署名CTA帯 */
+.cta-band {
+  background: var(--color-bg-dark);
+  border-radius: 20px;
+  padding: clamp(32px, 5vw, 48px);
+  text-align: center;
+  color: #fff;
+  margin: clamp(48px, 7vw, 72px) 0 0;
+}
+
+.cta-band__title {
+  font-family: var(--font-serif);
+  font-size: clamp(18px, 2.6vw, 24px);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  margin-bottom: 10px;
+}
+
+.cta-band__text {
+  font-size: 13.5px;
+  color: rgba(255, 255, 255, 0.78);
+  margin-bottom: 24px;
+}
+
+/* SNSシェア */
+.share {
+  margin-top: 40px;
+  text-align: center;
+}
+
+.share__title {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: var(--color-text-soft);
+  margin-bottom: 14px;
+}
+
+.share__list {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.share__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-accent);
+  border: 1px solid var(--color-accent);
+  border-radius: 100px;
+  padding: 8px 20px;
+  transition: background 0.3s, color 0.3s;
+}
+
+.share__link:hover {
+  background: var(--color-accent);
+  color: #fff;
+}
+
+/* .article 内のリストスタイルを打ち消す */
+.share__list .share__item {
+  padding-left: 0;
+}
+
+.share__list .share__item::before {
+  content: none;
+}
+
+/* 関連ページカード（内部リンク・回遊率向上） */
+.related {
+  max-width: var(--width-content);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.related__title {
+  font-family: var(--font-serif);
+  font-size: clamp(20px, 3vw, 26px);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+.related__list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.related__item {
+  display: block;
+  background: var(--color-bg);
+  border: 1px solid var(--color-line);
+  border-radius: 14px;
+  padding: 22px 24px;
+  transition: box-shadow 0.35s var(--ease-out), transform 0.35s var(--ease-out);
+}
+
+.related__item:hover {
+  box-shadow: 0 14px 32px rgba(29, 29, 31, 0.07);
+  transform: translateY(-3px);
+}
+
+.related__heading {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  margin-bottom: 8px;
+  color: var(--color-text);
+}
+
+.related__desc {
+  font-size: 12.5px;
+  color: var(--color-text-soft);
+  line-height: 1.8;
+}
+
+@media (max-width: 768px) {
+  .related__list {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ------------------------------------------------------------
+   13.5 FAQ（アコーディオン）
+------------------------------------------------------------ */
+.faq__list {
+  display: grid;
+  gap: 14px;
+}
+
+.faq__item {
+  background: var(--color-bg);
+  border: 1px solid var(--color-line);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.faq__question {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 24px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  list-style: none;
+  transition: background 0.3s;
+}
+
+.faq__question::-webkit-details-marker {
+  display: none;
+}
+
+.faq__question:hover {
+  background: var(--color-bg-tint);
+}
+
+.faq__icon {
+  position: relative;
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+}
+
+.faq__icon::before,
+.faq__icon::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 14px;
+  height: 1.5px;
+  background: var(--color-accent);
+  transform: translate(-50%, -50%);
+  transition: transform 0.3s var(--ease-out), opacity 0.3s;
+}
+
+.faq__icon::after {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.faq__item[open] .faq__icon::after {
+  transform: translate(-50%, -50%) rotate(0deg);
+  opacity: 0;
+}
+
+.faq__answer {
+  padding: 0 24px 22px;
+  font-size: 14px;
+  color: var(--color-text-soft);
+}
+
+.faq__answer a {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 /* ------------------------------------------------------------
