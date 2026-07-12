@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://jiantailanglin266-rgb.github.io/ruku-shomei-lp/sitemap.xml
+Sitemap: https://ruku-shomei.org/sitemap.xml
